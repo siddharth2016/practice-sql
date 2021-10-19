@@ -49,3 +49,12 @@ AND EXTRACT( MONTH FROM orderdate ) = 1
 
 SELECT count(customerid) FROM orders
 WHERE date_trunc( 'month', orderdate ) = date '2004-01-01'
+
+SELECT * FROM orders AS o
+INNER JOIN customers AS c ON o.customerid = c.customerid
+WHERE c.state = 'OH' OR c.state = 'NY' OR c.state = 'OR'
+ORDER BY o.orderid
+
+SELECT p.prod_id, p.quan_in_stock, p.sales FROM inventory AS p
+INNER JOIN products AS q ON p.prod_id = q.prod_id
+

@@ -113,3 +113,30 @@ SELECT max(age(birth_date)) FROM employees
 SELECT DISTINCT title FROM titles
 
 SELECT DISTINCT birth_date FROM employees
+
+SELECT first_name, last_name, gender FROM employees
+ORDER BY first_name, last_name DESC
+
+SELECT * FROM employees
+WHERE first_name='Aamer' AND last_name LIKE 'Z%'
+
+SELECT * FROM employees
+ORDER BY age(birth_date)
+
+SELECT * FROM employees
+WHERE first_name ILIKE 'k%'
+ORDER BY hire_date
+
+SELECT * FROM employees AS e
+INNER JOIN salaries AS s ON e.emp_no = s.emp_no
+INNER JOIN titles AS t ON t.emp_no = s.emp_no
+AND (
+t.from_date = s.from_date
+OR
+t.from_date = s.from_date + INTERVAL '2 days')
+ORDER BY e.emp_no
+
+
+SELECT * FROM employees AS e
+INNER JOIN dept_emp AS de ON e.emp_no = de.emp_no
+INNER JOIN departments AS d ON de.dept_no = d.dept_no

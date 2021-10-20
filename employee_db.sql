@@ -140,3 +140,73 @@ ORDER BY e.emp_no
 SELECT * FROM employees AS e
 INNER JOIN dept_emp AS de ON e.emp_no = de.emp_no
 INNER JOIN departments AS d ON de.dept_no = d.dept_no
+
+SELECT dept_no, count(emp_no)
+FROM dept_emp
+GROUP BY dept_no
+
+SELECT hire_date, count(emp_no)
+FROM employees
+GROUP BY hire_date
+ORDER BY hire_date
+
+SELECT e.emp_no, count(t.title)
+FROM employees AS e
+INNER JOIN titles AS t ON t.emp_no = e.emp_no
+WHERE EXTRACT(YEAR FROM hire_date) > 1991
+GROUP BY e.emp_no
+
+SELECT e.emp_no, de.from_date, de.to_date
+FROM employees AS e
+INNER JOIN dept_emp AS de ON e.emp_no = de.emp_no
+WHERE de.dept_no = 'd005'
+GROUP BY e.emp_no, de.from_date, de.to_date
+ORDER BY e.emp_no
+
+SELECT e.emp_no, count(t.title)
+FROM employees AS e
+INNER JOIN titles AS t ON e.emp_no = t.emp_no
+WHERE EXTRACT(YEAR FROM hire_date) > 1991
+GROUP BY e.emp_no
+HAVING count(t.title) > 2
+ORDER BY e.emp_no
+
+SELECT s.emp_no, count(s.salary) AS "# Salary Changed"
+FROM salaries AS s
+INNER JOIN dept_emp AS de ON s.emp_no = de.emp_no
+WHERE de.dept_no = 'd005'
+GROUP BY s.emp_no
+HAVING count(s.salary) > 15
+ORDER BY s.emp_no
+
+SELECT e.emp_no, count(s.from_date) AS "amount of raises"
+FROM employees AS e
+JOIN salaries AS s USING(emp_no)
+JOIN dept_emp AS de USING(emp_no)
+WHERE de.dept_no = 'd005'
+GROUP BY e.emp_no
+HAVING count(s.from_date) > 15
+ORDER BY e.emp_no;
+
+SELECT e.emp_no, count(de.dept_no)
+FROM employees AS e
+INNER JOIN dept_emp AS de ON e.emp_no = de.emp_no
+GROUP BY e.emp_no
+HAVING count(de.dept_no) > 1
+ORDER BY e.emp_no
+
+SELECT *, avg(salary) OVER()
+FROM salaries
+
+SELECT *, avg(salary) OVER(ORDER BY emp_no)
+FROM salaries
+
+
+SELECT DISTINCT emp_no,
+last_value(salary) OVER(
+    PARTITION BY emp_no
+    ORDER BY from_date
+    RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+)
+FROM salaries
+ORDER BY emp_no

@@ -58,3 +58,16 @@ ORDER BY o.orderid
 SELECT p.prod_id, p.quan_in_stock, p.sales FROM inventory AS p
 INNER JOIN products AS q ON p.prod_id = q.prod_id
 
+SELECT EXTRACT(YEAR FROM orderdate),
+EXTRACT(MONTH FROM orderdate),
+EXTRACT(DAY FROM orderdate),
+sum(quantity)
+FROM orderlines
+GROUP BY ROLLUP (
+    EXTRACT(YEAR FROM orderdate),
+    EXTRACT(MONTH FROM orderdate),
+    EXTRACT(DAY FROM orderdate)
+)
+ORDER BY EXTRACT(YEAR FROM orderdate),
+EXTRACT(MONTH FROM orderdate),
+EXTRACT(DAY FROM orderdate)

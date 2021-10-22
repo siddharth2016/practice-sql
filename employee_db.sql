@@ -210,3 +210,18 @@ last_value(salary) OVER(
 )
 FROM salaries
 ORDER BY emp_no
+
+
+CREATE VIEW "90-95" AS
+SELECT * FROM employees
+WHERE EXTRACT(YEAR FROM hire_date) BETWEEN 1990 AND 1995
+ORDER BY emp_no
+
+SELECT * FROM "90-95"
+
+CREATE VIEW "bigbucks" AS 
+SELECT e.emp_no, s.salary FROM employees AS e
+INNER JOIN salaries AS s ON e.emp_no = s.emp_no
+WHERE s.salary > 80000
+
+SELECT * FROM "bigbucks"

@@ -225,3 +225,13 @@ INNER JOIN salaries AS s ON e.emp_no = s.emp_no
 WHERE s.salary > 80000
 
 SELECT * FROM "bigbucks"
+
+
+SELECT s.emp_no, s.salary
+FROM salaries AS s
+INNER JOIN (
+    SELECT emp_no, max(from_date) AS "max"
+    FROM salaries
+    GROUP BY emp_no
+) AS ls ON ls.emp_no = s.emp_no
+WHERE ls.max = s.from_date

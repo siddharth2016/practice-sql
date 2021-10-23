@@ -71,3 +71,23 @@ GROUP BY ROLLUP (
 ORDER BY EXTRACT(YEAR FROM orderdate),
 EXTRACT(MONTH FROM orderdate),
 EXTRACT(DAY FROM orderdate)
+
+
+SELECT *,
+first_value(price) OVER (PARTITION BY category
+ORDER BY price)
+FROM products
+
+SELECT *,
+CASE 
+WHEN price > 20 THEN 'expensive'
+WHEN price BETWEEN 10 AND 20 THEN 'average'
+ELSE 'cheap'
+END AS "price class"
+FROM products
+ORDER BY prod_id
+
+SELECT prod_id, title, price, special,
+NULLIF(special, 0)
+FROM products
+
